@@ -12,10 +12,10 @@ class UsersController < ApplicationController
   end
 
   def update
-    unless @user.update(user_params)
-      render json: { errors: @user.errors.full_messages },
-             status: :unprocessable_entity
-    end
+    return if @user.update(user_params)
+
+    render json: { errors: @user.errors.full_messages },
+           status: :unprocessable_entity
   end
 
   def destroy
@@ -30,8 +30,8 @@ class UsersController < ApplicationController
 
   def find_user
     @user = User.find_by_id(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      render json: { errors: 'User not found' }, status: :not_found
+  rescue ActiveRecord::RecordNotFound
+    render json: { errors: 'User not found' }, status: :not_found
   end
 
   def user_params

@@ -1,9 +1,10 @@
 class AuthenticationController < ApplicationController
+  # rubocop:disable Metrics/MethodLength
 
   def signup
     @user = User.find_by_email(signup_params[:email])
     if @user.present?
-      render json: { message: 'Failed to create a user', error: 'User already exists'}, status: :conflict
+      render json: { message: 'Failed to create a user', error: 'User already exists' }, status: :conflict
     else
       @user = User.new(signup_params)
       if @user.save
@@ -19,12 +20,16 @@ class AuthenticationController < ApplicationController
           }
         }, status: :ok
       elsif @user
-        render json: { message: 'Failed to create an account', error: 'Password cannot be less than 6 letters' }, status: :unprocessable_entity
+        render json: { message: 'Failed to create an account', error: 'Password cannot be less than 6 letters' },
+               status: :unprocessable_entity
       else
-        render json: { message: 'Failed to create an account', error: 'Validation failed'}, status: :unprocessable_entity
+        render json: { message: 'Failed to create an account', error: 'Validation failed' },
+               status: :unprocessable_entity
       end
     end
   end
+
+  # rubocop:enable Metrics/MethodLength
 
   def login
     @user = User.find_by_email(login_params[:email])
@@ -41,9 +46,11 @@ class AuthenticationController < ApplicationController
         }
       }, status: :ok
     elsif @user
-      render json: { message: 'You are not authorize to access this account', error: 'Incorrect password' }, status: :unauthorized
+      render json: { message: 'You are not authorize to access this account', error: 'Incorrect password' },
+             status: :unauthorized
     else
-      render json: { message: 'You are not authorize to access this account', error: 'Incorrect email' }, status: :unauthorized
+      render json: { message: 'You are not authorize to access this account', error: 'Incorrect email' },
+             status: :unauthorized
     end
   end
 
